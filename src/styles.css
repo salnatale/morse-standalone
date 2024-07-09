@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1, .table-title {
+    text-align: center;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+button {
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    font-size: 24px;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+button.short-press {
+    background-color: #4da3ff;
+    color: white;
+}
+
+button.long-press {
+    background-color: #003f82;
+    color: white;
+}
+
+#mappingTableContainer {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    width: 80%;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td {
+    width: 33%;
+    position: relative;
+    z-index: 1;
+}
+
+.highlight {
+    background-color: yellow !important;
+    position: relative;
+    z-index: 2;
+}
+
+/* Redesign table with 3 columns */
+#mappingTable {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+#mappingTable tbody {
+    display: contents;
+}
+
+#mappingTable tbody tr {
+    display: contents;
+}
+
+#mappingTable tbody td {
+    display: inline-block;
+    width: 100%;
+}
+.output-box {
+    display: flex;
+
+    flex-wrap: wrap;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff; 
+    overflow-y: auto; /* Add vertical scroll if content overflows */
+    word-wrap: break-word; /* Ensures words break to avoid overflow */
+    white-space: pre-wrap; /* Preserves whitespace and wraps */
+    overflow-wrap: break-word; /* Breaks long words to fit in the container */
+    word-break: break-all; /* Breaks all words to fit in the container */
+    width: 50%; /* Ensure it takes the full width of its container */
+    box-sizing: border-box; /* Includes padding and border in element's total width and height */
+}
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.vert{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.slider-container {
+    margin-bottom: 20px;
+}
