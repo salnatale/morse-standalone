@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trit Language Translator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1>Trit Language Translator</h1>
-    <p>Press keys 1, 2, and 3 with short or long presses simultaneously to type. </p>
-    <p>To first learn, when attempting to type a letter, hold down the key(s) which need a 2 (long-click) and simultaneously click any which need a short click. Then let go of all keys. </p>
-    <p>The encodings were based on the relative frequencies of each letter in the english dictionary, and the ease of typing each 3trit combination, from easiest to most difficult. </p>
-    <a href="https://en.wikipedia.org/wiki/Letter_frequency">(find letter frequencies here)</a>
+    <h1 id="app-title">Patient Testing Application</h1>
+    <div id="selections">
+        <div>
+            <label class="switch">
+                <input type="checkbox" id="toggleSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <button class="select-button" id="morse-select"><p class="button-text">MORSE</p></button>
+        <button class="select-button" id="trit-select"><p class="button-text">TRIT</p></button>
+    </div>
+    <p id="description">Press keys 1, 2, and 3 with short or long presses simultaneously to type. <br>To first learn, when attempting to
+        type a letter, hold down the key(s) which need a 2 (long-click) and simultaneously click any which need a short
+        click. Then let go of all keys. <br>The encodings were based on the relative frequencies of each letter in the
+        english dictionary, and the ease of typing each 3trit combination, from easiest to most difficult. </p>
+    <a href="https://en.wikipedia.org/wiki/Letter_frequency" id="link">(find letter frequencies here)</a>
     <div class="buttons">
-        <button id="key1">1</button>
-        <button id="key2">2</button>
-        <button id="key3">3</button>
+        <button class="key-button" id="key1">1</button>
+        <button class="key-button" id="key2">2</button>
+        <button class="key-button" id="key3">3</button>
     </div>
-   <div class = "container">
-        <div class="vert"><p>Current Trit Combination: <span id="tritSequence">000</span></p>
-        <p>Typing Speed: <span id="cpm"></span></p>
+    <div class="container">
+        <div class="vert">
+            <p>Current Trit Combination: <span id="tritSequence">000</span></p>
+            <p>Typing Speed: <span id="cpm"></span></p>
+        </div>
+        <div id="translatedOutput" class="output-box"></div>
+
     </div>
-     <div id="translatedOutput" class="output-box"></div>
-    
-</div>
     <h2 class="table-title">3Trit Associations</h2>
     <div id="mappingTableContainer">
         <table id="mappingTable">
@@ -34,4 +48,5 @@
     </div>
     <script src="renderer.js"></script>
 </body>
+
 </html>
