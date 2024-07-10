@@ -46,8 +46,8 @@ const mappingTable = document.getElementById('mappingTable');
 
 const translateCombination_called_dict = { 'call_times': [], 'num_calls': 0 };
 
-const PRESS_THRESHOLD = 250; // For trit, press threshold from short to long click. For Morse, threshold from dot to dash.
-const INPUT_TIMEOUT = 3000; // Time in milliseconds to wait for next input before translating
+const PRESS_THRESHOLD = morseOrTrit ? 250 : 200; // For trit, press threshold from short to long click. For Morse, threshold from dot to dash.
+const INPUT_TIMEOUT = 500; // Time in milliseconds to wait for next input before translating
 
 // Populate the mapping table, sorted by trit
 buildMappingTable();
@@ -68,7 +68,11 @@ function buildHeading() {
         english dictionary, and the ease of typing each 3trit combination, from easiest to most difficult.`;
         // change the color of the trit select button to green
         document.getElementById('trit-select').style.backgroundColor = 'green';
-        document.getElementById('morse-select').style.backgroundColor = 'white';
+        document.getElementById('trit-select').children[0].style.color = 'white';
+
+        document.getElementById('morse-select').style.backgroundColor = 'transparent';
+        document.getElementById('morse-select').children[0].style.color = 'black';
+
     }
     else {
         document.getElementById('key2').style.display = 'none';
@@ -78,7 +82,11 @@ function buildHeading() {
         Press key 1 with short or long presses to type. <br>To first learn, when attempting to type a letter, hold down the
         key which need a long-click. Then let go of the key. <br>The encodings were based on the morse alphabet.`;
         document.getElementById('morse-select').style.backgroundColor = 'green';
-        document.getElementById('trit-select').style.backgroundColor = 'white';
+        document.getElementById('morse-select').children[0].style.color = 'white';
+        document.getElementById('trit-select').style.backgroundColor = 'transparent';
+        document.getElementById('trit-select').children[0].style.color = 'black';
+
+
     }
 }
 
@@ -101,6 +109,7 @@ toggleSwitch.addEventListener('change', () => {
     // Only allow switch when no text, to prevent confusion
     if ((translationDisplay.innerText.length > 0) || (!morseOrTrit && (startTime['1'] || lastInputTime))) {
         toggleSwitch.checked = !toggleSwitch.checked; // revert the switch back to its previous position
+        alert('Please empty the typing area before switching modes.');
         return;
     }
     morseOrTrit = !morseOrTrit;
@@ -138,6 +147,11 @@ document.addEventListener('keydown', (event) => {
         if (event.key === '1' && !startTime[event.key]) {
             startTime[event.key] = new Date().getTime(); // Record start time of key press
             keyButtons[event.key].classList.add('short-press');
+            timeoutIds[event.key] = setTimeout(() => {
+                keyButtons[event.key].classList.remove('short-press');
+                keyButtons[event.key].classList.add('long-press');
+            }, PRESS_THRESHOLD);
+            clearTimeout(lastInputTime);
             console.log(`Key ${event.key} down`);
         } else if (event.key === 'Backspace') {
             handleBackspace();
@@ -236,6 +250,10 @@ function update_cpm() {
     console.log(translateCombination_called_dict['call_times']);
     translateCombination_called_dict['num_calls'] = translateCombination_called_dict['call_times'].length;
 }
+function display_and_update_cpm() {
+    update_cpm();
+    cpmDisplay.innerText = `${Math.round(return_cpm())} cpm`;
+}
 
 function translateCombination() {
     if (morseOrTrit) {
@@ -249,8 +267,7 @@ function translateCombination() {
 
         // Highlight the translated letter in the mapping table
         highlightTranslatedLetter(translation);
-        update_cpm();
-        cpmDisplay.innerText = `${Math.round(return_cpm())} cpm`;
+        display_and_update_cpm();
 
         console.log(`Typing Speed: ${cpm} cpm`);
         tritState = ['0', '0', '0']; // Reset trit state
@@ -262,7 +279,9 @@ function translateCombination() {
         translationDisplay.innerText += translation; // Append translated character to output
         translationDisplay.scrollTop = translationDisplay.scrollHeight; // Scroll to bottom if necessary
         highlightTranslatedLetter(translation); // Highlight the translated letter in the mapping table
+        display_and_update_cpm();
         morseState = ''; // Reset morse state
+        updateDisplay();
     }
 
 }
@@ -275,11 +294,22 @@ function handleBackspace() {
 function highlightTranslatedLetter(translation) {
     const cells = mappingTable.getElementsByTagName('td');
     for (const cell of cells) {
-        if (cell.innerText.includes(translation)) {
-            cell.classList.add('highlight');
-            setTimeout(() => {
-                cell.classList.remove('highlight');
-            }, 500);
+        if (cell.innerText.includes('?')) {
+            if (translation === '?') {
+                cell.classList.add('highlight');
+                setTimeout(() => {
+                    cell.classList.remove('highlight');
+                }, 500);
+            }
         }
+        else {
+            if (cell.innerText.includes(translation) && (!cell.innerText.includes('?'))) {
+                cell.classList.add('highlight');
+                setTimeout(() => {
+                    cell.classList.remove('highlight');
+                }, 500);
+            }
+        }
+
     }
 }
